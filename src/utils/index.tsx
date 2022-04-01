@@ -5,7 +5,8 @@ export const isFalsy = (value: any) => value === 0 ? false : !value
 export const clearnObject = (object: object) => {
   //在函数中尽量不改变原是参数
   const result = { ...object }
-
+  console.log("obj", object);
+  console.log("result", result);
   Object.keys(result).forEach(key => {
     //先忽略掉
     //@ts-ignore
@@ -15,8 +16,10 @@ export const clearnObject = (object: object) => {
       delete result[key]
     }
   })
-  return result
+  return result;
+
 }
+//自定义hook 必须要以use 开头
 //void 表示这个函数不返回任何值
 export const useMount = (callback: () => void) => {
   useEffect(() => {
