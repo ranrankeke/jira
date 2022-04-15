@@ -32,13 +32,14 @@ export const ProjectListScreen = () => {
       console.log('res2', res)
       if (res.ok) {
         setUsers(await res.json())
+        console.log(users)
       }
     })
   })
 
   return <div style={{ width: '300px', margin: '0px auto' }}>
     <SearchPanel param={param} setParam={setParam} users={users} />
-    <List list={list} setList={setList} users={users} />
+    <List list={list} users={users} />
 
     <div style={{ backgroundColor: '#fff', padding: '48px', marginBottom: '20px' }}>
       <Test maxLength={10} defaultValue={'hello'} />

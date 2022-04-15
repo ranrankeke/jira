@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 
-export default function Test(props) {
+interface Props {
+  maxLength: number;
+  defaultValue: string;
+}
+
+export default function Test(props: Props) {
   const { maxLength, defaultValue } = props;
   const [value, setValue] = useState(defaultValue);
   const [inputLength, setInputLength] = useState(0);
-  const handleChange = e => {
+  const handleChange = (e: any) => {
     setValue(e.target.value);
     setInputLength(e.target.value.length);
   };

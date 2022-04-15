@@ -1,5 +1,26 @@
 import React from 'react'
-export const List = (props) => {
+
+interface listProps {
+  id: string;
+  name: string;
+  personId: string
+}
+
+interface Users {
+  id: string;
+  name: string;
+  email: string;
+  title: string;
+  organization: string;
+
+}
+
+interface Props {
+  list: listProps[],
+  users: Users[]
+}
+
+export const List = (props: Props) => {
   const { list, users } = props;
 
   return <table style={{ border: "1" }}>
