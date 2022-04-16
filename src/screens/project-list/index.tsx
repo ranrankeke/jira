@@ -13,6 +13,7 @@ export const ProjectListScreen = () => {
     name: '',
     personId: ''
   })
+
   const [list, setList] = useState([])
   const [users, setUsers] = useState([])
 
@@ -20,7 +21,6 @@ export const ProjectListScreen = () => {
 
   useEffect(() => {
     fetch(`${apiUrl}/projects?${qs.stringify(cleanObject(debouncedParam))}`).then(async res => {
-      console.log('res', res)
       if (res.ok) {
         setList(await res.json())
       }
@@ -29,10 +29,8 @@ export const ProjectListScreen = () => {
 
   useMount(() => {
     fetch(`${apiUrl}/users`).then(async res => {
-      console.log('res2', res)
       if (res.ok) {
         setUsers(await res.json())
-        console.log(users)
       }
     })
   })
