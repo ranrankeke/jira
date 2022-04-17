@@ -1,11 +1,12 @@
 import React from 'react'
 
-interface User {
+export interface User {
   id: string;
   name: string;
   email: string;
   title: string;
-  organization: string;
+  organization: string; // 部门
+  token: string //权鉴
 }
 
 interface SearchPanelProps {
