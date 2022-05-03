@@ -5,11 +5,17 @@ import { Row } from 'components/lib'
 //加上路径 防止打包出错
 import { ReactComponent as SoftwareLogo } from './assets/software-logo.svg'
 import { Dropdown, Menu,Button } from 'antd'
+import { useDocumentTitle } from 'utils'
+import { Test } from './utils/test'
 
 export const AuthenticatedApp = () => {
   const { logout,user } = useAuth();
+
+  useDocumentTitle('项目列表',false)
+
   return (
     <Container>
+      <Test />
       <Header between={true}>
         <HeaderLeft gap = {true}>
           <SoftwareLogo width='18rem' color='rgb(38,132,255)' />

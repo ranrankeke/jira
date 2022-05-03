@@ -1,4 +1,4 @@
-import { useEffect,useState } from "react"
+import { useEffect,useState, useRef } from "react"
 //value 可以是任何类型
 export const isFalsy = (value: unknown) => value === 0 ? false : !value
 
@@ -78,4 +78,22 @@ export const useArray = <T>(initialArray: T[]) => {
     }
   }
 
+}
+
+export const useDocumentTitle = (title: string, keepOnUnmout: boolean = true) => {
+const oldTitle = useRef(document.title).current
+ //页面加载 是旧title
+ //页面加载完 是新title 
+  useEffect(()=> {
+    document.title = title
+  },[title])
+
+  useEffect(()=>{
+    return ()=>{
+      if(!keepOnUnmout){
+        //当没有依赖项时 利用了闭包的原理 读到的是旧title
+        document.title = oldTitle
+      }
+    }
+  },[keepOnUnmout,oldTitle])
 }
