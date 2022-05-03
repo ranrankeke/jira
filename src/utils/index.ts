@@ -82,6 +82,7 @@ export const useArray = <T>(initialArray: T[]) => {
 
 export const useDocumentTitle = (title: string, keepOnUnmout: boolean = true) => {
 const oldTitle = useRef(document.title).current
+//在使用useRef 前：
  //页面加载 是旧title
  //页面加载完 是新title 
   useEffect(()=> {
@@ -97,3 +98,5 @@ const oldTitle = useRef(document.title).current
     }
   },[keepOnUnmout,oldTitle])
 }
+
+export const restRoute = () => window.location.href = window.location.origin

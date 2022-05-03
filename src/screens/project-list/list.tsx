@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 import { TableProps } from 'antd/es/table'
 import styled from '@emotion/styled'
 import { DevTools } from 'jira-dev-tool'
+import { Link } from 'react-router-dom'
 
 export interface Project {
   id: string;
@@ -27,8 +28,10 @@ export const List = ( { users,...props }: ListProps) => {
     columns={[
         {
           title: '项目名称',
-          dataIndex: 'name',
-          sorter: (a,b) => a.name.localeCompare(b.name)
+          sorter: (a,b) => a.name.localeCompare(b.name),
+          render(project){
+            return <Link to={String(project.id)}>{project.name}</Link>
+          }
         },
         {
           title: '部门',

@@ -5,44 +5,63 @@ import { Row } from 'components/lib'
 //加上路径 防止打包出错
 import { ReactComponent as SoftwareLogo } from './assets/software-logo.svg'
 import { Dropdown, Menu,Button } from 'antd'
-import { useDocumentTitle } from 'utils'
-import { Test } from './utils/test'
+import { useDocumentTitle ,restRoute} from 'utils'
+import { Route, Routes, Navigate } from 'react-router'
+import { BrowserRouter as Router } from 'react-router-dom'
+import { ProjectScreen } from 'screens/project'
 
 export const AuthenticatedApp = () => {
-  const { logout,user } = useAuth();
 
   useDocumentTitle('项目列表',false)
 
   return (
     <Container>
-      <Test />
-      <Header between={true}>
-        <HeaderLeft gap = {true}>
-          <SoftwareLogo width='18rem' color='rgb(38,132,255)' />
-          <h3>项目</h3>
-          <h3>用户</h3>
-        </HeaderLeft>
-        <HeaderRight>
-          <Dropdown overlay={<Menu items={[{
-            label:(
-              <Button type='link' onClick={logout}>登出</Button>
-            ),
-            key : 'logout'
-          }]}/>}>
-            
-          <Button type='link' onClick = { e => e.preventDefault()}>
-           Hi,{user?.name}
-          </Button>
-       
-          </Dropdown>
-        </HeaderRight>
-      </Header>
-      <Main>
-        <ProjectListScreen />
+      <PageHeader />
+      <Main>     
+        <Router>      
+          <Routes>
+            <Route path = {'/projects' } element = {<ProjectListScreen />} />
+            <Route path = {'/projects/:personId/*'} element = {<ProjectScreen />} />
+            <Route path="/" element={<Navigate to="/projects" />} />
+          </Routes>
+          {/* 路由重定向 */}
+          {/* <Navigate to={"/projects"} /> */}
+        </Router>
       </Main>
     </Container>
   )
 }
+
+const PageHeader = () => {
+  const { logout,user } = useAuth();
+
+  return <Header between={true}>
+  <HeaderLeft gap = {true}>
+    {/* 点击跳转到当前url */}
+    <Button type={'link'} onClick={restRoute}>
+      <SoftwareLogo width='18rem' color='rgb(38,132,255)' />
+    </Button>
+  
+    <h3>项目</h3>
+    <h3>用户</h3>
+  </HeaderLeft>
+  <HeaderRight>
+    <Dropdown overlay={<Menu items={[{
+      label:(
+        <Button type='link' onClick={logout}>登出</Button>
+      ),
+      key : 'logout'
+    }]}/>}>
+      
+    <Button type='link' onClick = { e => e.preventDefault()}>
+     Hi,{user?.name}
+    </Button>
+ 
+    </Dropdown>
+  </HeaderRight>
+</Header>
+}
+
 const Header = styled(Row)`
   padding: 3.2rem;
   box-shadow: 0 0 5px 0 rgba(0,0,0,0.1);

@@ -13,7 +13,7 @@ const [ isRegister,setIsRegister ] = useState(false)
 
 const [ error, setError] = useState<Error | null >(null)
 
-// useDocumentTitle('请登录注册以继续',false)
+useDocumentTitle('请登录注册以继续',false)
   return (
     <Container>
       <Header />
