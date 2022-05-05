@@ -5,30 +5,20 @@ import { useDebounce } from 'utils'
 import styled from '@emotion/styled'
 import { useProjects } from 'utils/project'
 import { useUsers } from 'utils/user'
+import { useUrlQueryParam } from 'utils/url'
 
 export const ProjectListScreen = () => {
-  const [param,setParam] = useState({
-    //输入框的内容
-    name: '',
-    //选择框的projects 数据中的personId
-    personId: ''
-  })
-  //users的列表
-  // const [users,setUsers] = useState([]);
-  // const [list,setList] = useState([])
-
-  const debouncedParam = useDebounce(param, 2000)
-  //封装好的请求
-  // const client = useHttp()
-
-  const { isLoading, data:list} = useProjects(debouncedParam)
-    //封装后的写法
-  // useMount(()=>{
-  //   client('users').then(setUsers)
+  // const [,setParam] = useState({
+  //   //输入框的内容
+  //   name: '',
+  //   //选择框的projects 数据中的personId
+  //   personId: ''
   // })
-
+  const [param, setParam] = useUrlQueryParam(['name','personId']) 
+  
+  const debouncedParam = useDebounce(param, 2000)
+  const { isLoading, data:list} = useProjects(debouncedParam)
   const { data: users } = useUsers()
-
   return (
     <Container>
       <h1>项目列表</h1>
@@ -37,6 +27,8 @@ export const ProjectListScreen = () => {
     </Container>
   )
 }
+//跟踪无限循环的组件
+ProjectListScreen.whyDidYouRender = true
 
 const Container = styled.div`
   padding: 3.2rem

@@ -98,5 +98,5 @@ const oldTitle = useRef(document.title).current
     }
   },[keepOnUnmout,oldTitle])
 }
-
+//window.location.origin（'?'前边的URL）
 export const restRoute = () => window.location.href = window.location.origin

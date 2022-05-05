@@ -4,13 +4,11 @@ export const Test = () => {
 
   useEffect(()=> {
     return () => {
-      console.log("eff num", num)
     }
   },[num])
 
   useEffect(()=>{
     let id= setInterval(()=>{
-      console.log(num)
     },1000)
     return ()=> clearInterval(id)
   },[num])

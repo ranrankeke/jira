@@ -18,9 +18,9 @@ useDocumentTitle('请登录注册以继续',false)
     <Container>
       <Header />
       <Background />
-      <Button onClick={() => {
+      {/* <Button onClick={() => {
         throw new Error('点击抛出一个异常')
-      }}>抛出异常</Button>
+      }}>抛出异常</Button> */}
       <ShadowCard>
       <Title>
         {isRegister? '注册' : '登录'}
