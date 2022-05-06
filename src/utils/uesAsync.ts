@@ -1,5 +1,6 @@
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
+import { useMountedRef } from 'utils';
 //传递给参数的类型
 interface State<D> {
   error: Error | null; 
@@ -23,27 +24,28 @@ export const useAsync = <D>(initialState?:State<D>,initialConfig?:typeof default
     ...defaultInitialState,
     ...initialState
   })
+  const mountedRef = useMountedRef()
 
   const [retry, setRetry ] = useState(( ()=> () => {
 
   }))
 
-  const setData = (data: D) => {
+  const setData = useCallback((data: D) => {
     setState({
       data,
       stat: 'success',
       error: null
     })
-  }
+  },[])
 
-  const setError = (error:Error) => setState({
+  const setError =useCallback( (error:Error) => setState({
     data: null,
     stat: 'error',
     error
-  })
+  }),[])
 
   // run 用来触发异步请求
-  const run = (promise: Promise<D>,runConfig?:{retry: () => Promise<D>}) => {
+  const run = useCallback( (promise: Promise<D>,runConfig?:{retry: () => Promise<D>}) => {
     if(!promise || !promise.then) {
       throw new Error ('请传入promise 类型数据')
     }
@@ -54,11 +56,13 @@ export const useAsync = <D>(initialState?:State<D>,initialConfig?:typeof default
       }
     })
 
-    setState({...state, stat: 'loading'});
+    // setState({...state, stat: 'loading'});
+    setState(prevState => ({...prevState, stat: 'loading'}));
 
     return promise
     .then(data => {
-     setData(data)
+      //如果为true 就返回数据 否则不返回  阻止在已卸载组件上赋值
+      if(mountedRef.current) setData(data)
       return data
     })
     .catch(error => {
@@ -68,7 +72,7 @@ export const useAsync = <D>(initialState?:State<D>,initialConfig?:typeof default
       return error
     })
 
-  }
+  },[config?.throwOnError, mountedRef, setData,setError])
   
   return {
     isIdle: state.stat === 'idle',

@@ -7,8 +7,10 @@ import { useUsers } from 'utils/user'
 import { useDocumentTitle } from 'utils'
 import { useProjectSearchParams } from './util'
 import { Button } from 'antd'
+import { Row } from 'components/lib'
 
-export const ProjectListScreen = () => {
+
+export const ProjectListScreen = (props: {setProjectModalOpen: (isOpen: boolean) => void} ) => {
   useDocumentTitle('项目列表',false)
 
   const[ param, setParam] = useProjectSearchParams()
@@ -16,15 +18,26 @@ export const ProjectListScreen = () => {
   const { data: users } = useUsers()
   return (
     <Container>
-      <h1>项目列表</h1>
+      <Row between={true}>
+        <h1>项目列表</h1>
+        <Button onClick={()=>props.setProjectModalOpen(true)}>创建项目</Button>
+      </Row>
+      
       {/* <Button onClick={retry}>retry</Button> */}
       <SearchPanel param={param} setParam={setParam} users={users || []} />
-      <List refresh={retry} dataSource={list || []} users={users || []} loading={isLoading} />
+      
+      <List 
+        refresh={retry} 
+        dataSource={list || []} 
+        users={users || []} 
+        loading={isLoading} 
+        setProjectModalOpen={props.setProjectModalOpen} 
+      />
     </Container>
   )
 }
 //跟踪无限循环的组件
-ProjectListScreen.whyDidYouRender = true
+// ProjectListScreen.whyDidYouRender = true
 
 const Container = styled.div`
   padding: 3.2rem

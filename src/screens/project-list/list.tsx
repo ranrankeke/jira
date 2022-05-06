@@ -1,6 +1,6 @@
 import React from 'react'
 import { User } from './searchPanel'
-import { Table, Spin, Typography } from 'antd'
+import { Table, Spin, Typography, Dropdown, Button, Menu } from 'antd'
 import dayjs from 'dayjs'
 import { TableProps } from 'antd/es/table'
 import styled from '@emotion/styled'
@@ -8,6 +8,7 @@ import { DevTools } from 'jira-dev-tool'
 import { Link } from 'react-router-dom'
 import { Pin } from 'components/pin'
 import { useEditProject } from 'utils/project'
+
 
 export interface Project {
   id: number;
@@ -22,6 +23,7 @@ export interface Project {
 interface ListProps extends TableProps<Project> {
   users: User[];
   refresh?: () => void
+  setProjectModalOpen:(isOpen:boolean) => void
 }
 
 export const List = ( { users,...props }: ListProps) => {
@@ -70,6 +72,17 @@ export const List = ( { users,...props }: ListProps) => {
               }
             </span>
           }
+        },
+        {
+          render(value,project){
+            return <Dropdown overlay={<Menu>
+              <Menu.Item key='edit'>
+                <Button type = 'link' onClick={() => props.setProjectModalOpen(true)}>编辑</Button>
+              </Menu.Item>
+            </Menu>}>
+              <Button type='link'>...</Button>
+            </Dropdown>
+          }
         }
       ]}
 
@@ -102,7 +115,8 @@ export const List = ( { users,...props }: ListProps) => {
     // </table>
   )
 }
-
+//跟踪无限循环的组件
+List.whyDidYouRender = true
 const FullPage = styled.div`
   height: 100vh;
   display: flex;

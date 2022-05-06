@@ -1,6 +1,7 @@
 import * as qs from 'qs'
 import * as auth from '../authProvider'
 import { useAuth } from 'context/authContext'; 
+import { useCallback } from 'react';
 
 const apiUrl = process.env.REACT_APP_API_URL
 //RequestInit 是fetch api里面定义的第二个参数的类型
@@ -48,7 +49,7 @@ export const http = (endpoint: string, {data, token, headers, ...customConfig}:C
 export const useHttp = () => { 
   const {user} = useAuth()
   //todo 讲解ts操作符
-  return (...[endpoint, config]:Parameters<typeof http>) => {
+  return useCallback((...[endpoint, config]:Parameters<typeof http>) => {
     return http(endpoint,{...config,token:user?.token})
-  }
+  },[user?.token])
 }

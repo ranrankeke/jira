@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { Input,Form,Select } from 'antd'
+import { Input,Form } from 'antd'
 import { Project } from './list';
 import { UserSelect } from 'components/useSelect';
 

@@ -13,8 +13,7 @@ export const useUrlQueryParam = <K extends string> (keys: K[]) => {
       //[key] 表示读取变量
         return {...prev, [key]: searchParams.get(key) || ''}
       //reduce()第二个参数为设置初始值
-    },{}),[searchParams]
-    ),
+    },{}),[searchParams]),
 
     (params: Partial<{[key in K]: unknown}>) => {
       //Object.fromEntries() 方法把键值对列表转换为一个对象。
