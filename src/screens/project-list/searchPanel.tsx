@@ -1,9 +1,11 @@
 
 import React from 'react'
 import { Input,Form,Select } from 'antd'
+import { Project } from './list';
+import { UserSelect } from 'components/useSelect';
 
 export interface User {
-  id: string;
+  id: number;
   name: string;
   email: string;
   title: string;
@@ -14,10 +16,12 @@ export interface User {
 
 interface SearchPanelProps {
   users: User[],
-  param:{
-    name: string;
-    personId: string;
-  },
+  //用 ts pick 拿取 name personId 的类型 Partial 拿取部分类型 优点：有很大的灵活性
+  param: Partial<Pick<Project,'name' | 'personId'>>,
+  // param:{
+  //   name: string;
+  //   personId: string;
+  // },
   setParam:(param: SearchPanelProps['param']) => void;
 }
 export const SearchPanel = ({param,setParam,users}:SearchPanelProps) => {
@@ -30,6 +34,16 @@ export const SearchPanel = ({param,setParam,users}:SearchPanelProps) => {
        })} />
        </Form.Item>
        <Form.Item>
+          {/* 使用封装好的select */}
+         <UserSelect 
+            defaultOptionName='负责人'
+            value={param.personId} 
+            onChange={value => setParam({
+              ...param,
+              personId: value
+       })}  
+        />
+{/* 
        <Select value={param.personId} onChange={value => setParam({
          ...param,
          personId: value
@@ -40,7 +54,7 @@ export const SearchPanel = ({param,setParam,users}:SearchPanelProps) => {
              <Select.Option value={String(item.id)} key={item.id}>{item.name}</Select.Option>
            )
          }
-       </Select>
+       </Select> */}
        </Form.Item>
     </Form>
   )

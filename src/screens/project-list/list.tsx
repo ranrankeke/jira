@@ -6,11 +6,13 @@ import { TableProps } from 'antd/es/table'
 import styled from '@emotion/styled'
 import { DevTools } from 'jira-dev-tool'
 import { Link } from 'react-router-dom'
+import { Pin } from 'components/pin'
+import { useEditProject } from 'utils/project'
 
 export interface Project {
-  id: string;
+  id: number;
   name: string;
-  personId: string;
+  personId: number;
   pin: boolean;
   organization: string;
   created: number;
@@ -19,13 +21,24 @@ export interface Project {
 //ListProps 包含 TableProps里面的属性 TableProps里面包含table组件的属性
 interface ListProps extends TableProps<Project> {
   users: User[];
+  refresh?: () => void
 }
 
 export const List = ( { users,...props }: ListProps) => {
   // ...props 相当于 父组件给传过来的属性和值
+  const { mutate } = useEditProject()
+  //函数柯里化
+  const pinProject = (id: number) => (pin: boolean) => mutate({id, pin}).then(props.refresh)
   return (
     <Table
     columns={[
+        {
+          title: <Pin checked = { true } disabled = { true } />,
+          render(project){
+            //编辑的时候 想服务器端发送编辑请求s
+            return <Pin checked={project.pin} onCheckChange={pinProject(project.id)} />
+          }
+        },
         {
           title: '项目名称',
           sorter: (a,b) => a.name.localeCompare(b.name),

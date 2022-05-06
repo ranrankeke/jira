@@ -5,14 +5,12 @@ import { Row } from 'components/lib'
 //加上路径 防止打包出错
 import { ReactComponent as SoftwareLogo } from './assets/software-logo.svg'
 import { Dropdown, Menu,Button } from 'antd'
-import { useDocumentTitle ,restRoute} from 'utils'
+import { restRoute } from 'utils'
 import { Route, Routes, Navigate } from 'react-router'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { ProjectScreen } from 'screens/project'
 
 export const AuthenticatedApp = () => {
-
-  useDocumentTitle('项目列表',false)
 
   return (
     <Container>
