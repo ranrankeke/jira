@@ -1,8 +1,10 @@
 import { Popover, Typography,List, Divider,Button } from 'antd'
 import { useProjects } from 'utils/project'
 import styled from '@emotion/styled'
+import { useDispatch} from 'react-redux'
 
 export const ProjectPopover = (props: {setProjectModalOpen: (isOpen: boolean) => void} ) => {
+  const dispatch = useDispatch()
   const { data: projects, isLoading} = useProjects()
   const pinnedProjects = projects?.filter(project => project.pin)
 

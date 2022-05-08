@@ -17,10 +17,9 @@ export const useUrlQueryParam = <K extends string> (keys: K[]) => {
 
     (params: Partial<{[key in K]: unknown}>) => {
       //Object.fromEntries() 方法把键值对列表转换为一个对象。
-      console.log('searchParams',searchParams)
+
       const o = cleanObject({...Object.fromEntries(searchParams),...params}) as URLSearchParamsInit
-      console.log('params',params)
-      console.log('o',o)
+     
       return setSearchParam(o)
     }
   ] as const

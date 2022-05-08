@@ -14,7 +14,7 @@ import { ProjectModal } from 'screens/project-list/projectModal'
 import { ProjectPopover } from 'components/projectPopover'
 
 export const AuthenticatedApp = () => {
-  const [ projectModalOpen, setProjectModalOpen ]  = useState(false)
+  // const [ projectModalOpen, setProjectModalOpen ]  = useState(false)
 
   return (
     <Container>
