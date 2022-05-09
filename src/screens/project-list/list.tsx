@@ -1,13 +1,12 @@
 import React from 'react'
 import { User } from './searchPanel'
-import { Table, Spin, Typography, Dropdown, Button, Menu } from 'antd'
+import { Table, Dropdown, Button, Menu } from 'antd'
 import dayjs from 'dayjs'
 import { TableProps } from 'antd/es/table'
-import styled from '@emotion/styled'
-import { DevTools } from 'jira-dev-tool'
 import { Link } from 'react-router-dom'
 import { Pin } from 'components/pin'
 import { useEditProject } from 'utils/project'
+import { useProjectModal } from './util'
 
 
 export interface Project {
@@ -22,15 +21,15 @@ export interface Project {
 //ListProps 包含 TableProps里面的属性 TableProps里面包含table组件的属性
 interface ListProps extends TableProps<Project> {
   users: User[];
-  refresh?: () => void
-  setProjectModalOpen:(isOpen:boolean) => void
 }
 
 export const List = ( { users,...props }: ListProps) => {
   // ...props 相当于 父组件给传过来的属性和值
   const { mutate } = useEditProject()
+  const {startEdit} = useProjectModal()
+  const editProject = (id: number) => () => startEdit(id)
   //函数柯里化
-  const pinProject = (id: number) => (pin: boolean) => mutate({id, pin}).then(props.refresh)
+  const pinProject = (id: number) => (pin: boolean) => mutate({id, pin})
   return (
     <Table
     columns={[
@@ -75,11 +74,20 @@ export const List = ( { users,...props }: ListProps) => {
         },
         {
           render(value,project){
-            return <Dropdown overlay={<Menu>
-              <Menu.Item key='edit'>
-                <Button type = 'link' onClick={() => props.setProjectModalOpen(true)}>编辑</Button>
-              </Menu.Item>
-            </Menu>}>
+            return <Dropdown overlay={
+              <Menu items={[{
+                label:'编辑',
+                key : 'edit',
+                onClick: editProject(project.id)
+              },{
+                label:'删除',
+                key: 'delete'
+              }]}/>
+            // <Menu>
+            //   <Menu.Item key='edit' onClick={editProject(project.id)}>编辑</Menu.Item>
+            //   <Menu.Item key='delete'>删除</Menu.Item>
+            // </Menu>
+          }>
               <Button type='link'>...</Button>
             </Dropdown>
           }
@@ -92,46 +100,9 @@ export const List = ( { users,...props }: ListProps) => {
         //给每一行家key值
         rowKey={project => project.id } 
     />
-
-    // <table>
-    //   <thead>
-    //     <tr>
-    //       <th>名称</th>
-    //       <th>负责人</th>
-    //     </tr>
-    //   </thead>
-    //  <tbody>
-    //  {list.map((item)=>
-    //       <tr key={item.id}>
-    //         <th>{item.name}</th>
-    //         <th>
-    //           {
-    //             users.find(users => users.id === item.personId)?.name || '未知'
-    //           }
-    //         </th>
-    //       </tr>
-    //   )}
-    //  </tbody>
-    // </table>
   )
 }
 //跟踪无限循环的组件
-List.whyDidYouRender = true
-const FullPage = styled.div`
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
+// List.whyDidYouRender = true
 
-export const FullPageLoading = () => {
-  return <FullPage>
-    <Spin size='large' />
-  </FullPage>
 
-}
-
-export const FullPageErrorFallback = ({error}: {error:Error | null}) => <FullPage>
-  <DevTools/>
-  <Typography.Text type='danger' >{error?.message}</Typography.Text>
-</FullPage>

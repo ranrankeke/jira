@@ -18,8 +18,10 @@ export const cleanObject = (object:{[key: string]: unknown}) => {
       delete(result[key])
     }
   })
+  
   return result
 }
+
 //自定义hook 必须用use开头
 export const useMount = (callback:() => void) => {
   useEffect(()=>{
@@ -28,6 +30,7 @@ export const useMount = (callback:() => void) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 }
+
 // 自定义hook里面会使用其他hook 
 // 去抖 hook                 delay也可以不传 ？. 表示可选
 // 泛型 先定义一个泛型的占位符，然后value参数也就是v 它的返回值也就是v 相当于进行了绑定，在后面应用的时候，当传入的value 是什么类型，泛型V也就确定了

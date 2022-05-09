@@ -4,7 +4,7 @@ import { UnauthenticatedApp } from 'unauthenticatedApp';
 import { AuthenticatedApp } from 'authenticatedApp';
 import './App.css';
 import { ErrorBoundary } from 'components/errorBoundary';
-import { FullPageErrorFallback } from 'screens/project-list/list';
+import { FullPageErrorFallback } from 'components/lib';
 
 function App() {
   const { user } = useAuth()

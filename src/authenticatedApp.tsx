@@ -1,4 +1,4 @@
-import { useState } from 'react'
+
 import { ProjectListScreen } from 'screens/project-list'
 import { useAuth } from 'context/authContext'
 import styled from '@emotion/styled'
@@ -14,36 +14,36 @@ import { ProjectModal } from 'screens/project-list/projectModal'
 import { ProjectPopover } from 'components/projectPopover'
 
 export const AuthenticatedApp = () => {
-  const [ projectModalOpen, setProjectModalOpen ]  = useState(false)
+  // const [ projectModalOpen, setProjectModalOpen ]  = useState(false)
 
   return (
     <Container>
-      <PageHeader setProjectModalOpen={setProjectModalOpen} />
-      <Button onClick = {()=>setProjectModalOpen(true)}>打开</Button>
+      <Router>    
+      <PageHeader />
+      <Button>打开</Button>
       <Main>     
-        <Router>      
           <Routes>
-            <Route path = {'/projects' } element = {<ProjectListScreen setProjectModalOpen={setProjectModalOpen} />} />
+            <Route path = {'/projects' } element = {<ProjectListScreen />} />
             <Route path = {'/projects/:personId/*'} element = {<ProjectScreen  />} />
             <Route path="/" element={<Navigate to="/projects" />} />
           </Routes>
           {/* 路由重定向 */}
           {/* <Navigate to={"/projects"} /> */}
-        </Router>
       </Main>
-      <ProjectModal projectModalOpen = {projectModalOpen} onClose = {()=>setProjectModalOpen(false)} />
+      <ProjectModal />
+      </Router>
     </Container>
   )
 }
 
-const PageHeader = (props: {setProjectModalOpen: (isOpen: boolean) => void}) => {
+const PageHeader = () => {
   return <Header between={true}>
     <HeaderLeft gap = {true}>
       {/* 点击跳转到当前url */}
       <Button style={{padding: 0}} type={'link'} onClick={restRoute}>
        <SoftwareLogo width='18rem' color='rgb(38,132,255)' />
       </Button>
-    <ProjectPopover setProjectModalOpen = {props.setProjectModalOpen} />
+    <ProjectPopover />
   
       <span>用户</span>
     </HeaderLeft>

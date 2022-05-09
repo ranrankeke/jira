@@ -1,5 +1,7 @@
 import { useUrlQueryParam } from 'utils/url'
 import { useMemo } from 'react'
+import { useProject } from 'utils/project'
+
 export const useProjectSearchParams = () => {
   //从url里面直接得到的数据都是string 需要处理
   const [param, setParam] = useUrlQueryParam(['name','personId']) 
@@ -13,4 +15,34 @@ export const useProjectSearchParams = () => {
     ),[param]),
     setParam
   ] as const
+}
+//用url创建模态框的状态 
+export const useProjectModal = () => {
+   
+const [{projectCreate},setProjectCreate] = useUrlQueryParam([
+  'projectCreate'
+])
+const [{editingProjectId},setEditingProjectId] = useUrlQueryParam([
+  'editingProjectId'
+])
+
+const {data: editingProject, isLoading} = useProject(Number(editingProjectId))
+// console.log('data',editingProject)
+// const  a = getUrlParams(['projectCreate','name'])
+
+const open = () => setProjectCreate({projectCreate: true})
+const close = () => {
+  setProjectCreate({projectCreate: undefined})
+  setEditingProjectId({editingProjectId: undefined})
+}
+
+const startEdit = (id: number) => setEditingProjectId({editingProjectId:id})
+return {
+  projectModalOpen: projectCreate === 'true' || Boolean(editingProject),
+  open,
+  close,
+  startEdit,
+  editingProject,
+  isLoading
+  }
 }

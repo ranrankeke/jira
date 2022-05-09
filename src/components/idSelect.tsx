@@ -5,8 +5,8 @@ import { Select } from 'antd'
 type SelectProps = React.ComponentProps<typeof Select>
 //IdSelectProps继承Select自带的属性，但是有属性冲突，用Omit type 来处理，删除自带属性中 包含自定属性的部分
 interface IdSelectProps extends Omit<SelectProps,'value' | 'onChange' | 'options'>{ 
-  value: Raw | undefined | null,
-  onChange: (value?:number) => void,
+  value?: Raw | undefined | null,
+  onChange?: (value?:number) => void,
   defaultOptionName?: string,
   options?:{ name: string, id: number}[]
 }
@@ -17,7 +17,7 @@ export const IdSelect = (props: IdSelectProps) => {
   return <Select
   //在选择下拉框之前 value = 0 
     value = {options?.length ? toNumber(value) : 0}
-    onChange = { value => onChange(toNumber(value) || undefined)}
+    onChange = { value => onChange?.(toNumber(value) || undefined)}
     {...restProps}
   >
     { 
