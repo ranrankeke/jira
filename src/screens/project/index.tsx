@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Route, Routes, Navigate} from 'react-router'
+import { Route, Routes } from 'react-router'
 import { KanbanScreen } from 'screens/kanban'
 import { EpicScreen } from 'screens/epic'
 
@@ -13,6 +13,7 @@ export const ProjectScreen = () => {
         <Routes>
           <Route path = {'/kanban'} element = {<KanbanScreen />} />
           <Route path ={'/epic'} element = {<EpicScreen />} />
+          {/* <Navigate to={window.location.pathname + '/kanban'} replace={true}/> */}
         </Routes>
     </div>
   )

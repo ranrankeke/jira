@@ -1,23 +1,14 @@
 import React from 'react'
-import { User } from './searchPanel'
-import { Table, Dropdown, Button, Menu } from 'antd'
+import { User } from '../../types/user'
+import { Table, Dropdown, Button, Menu ,Modal} from 'antd'
 import dayjs from 'dayjs'
 import { TableProps } from 'antd/es/table'
 import { Link } from 'react-router-dom'
 import { Pin } from 'components/pin'
-import { useEditProject } from 'utils/project'
-import { useProjectModal } from './util'
+import { useDeleteProject, useEditProject } from 'utils/project'
+import { useProjectModal, useProjectsQueryKey } from './util'
+import { Project } from '../../types/project'
 
-
-export interface Project {
-  id: number;
-  name: string;
-  personId: number;
-  pin: boolean;
-  organization: string;
-  created: number;
-  
-}
 //ListProps 包含 TableProps里面的属性 TableProps里面包含table组件的属性
 interface ListProps extends TableProps<Project> {
   users: User[];
@@ -25,9 +16,9 @@ interface ListProps extends TableProps<Project> {
 
 export const List = ( { users,...props }: ListProps) => {
   // ...props 相当于 父组件给传过来的属性和值
-  const { mutate } = useEditProject()
-  const {startEdit} = useProjectModal()
-  const editProject = (id: number) => () => startEdit(id)
+  const { mutate } = useEditProject(useProjectsQueryKey())
+
+ 
   //函数柯里化
   const pinProject = (id: number) => (pin: boolean) => mutate({id, pin})
   return (
@@ -74,22 +65,7 @@ export const List = ( { users,...props }: ListProps) => {
         },
         {
           render(value,project){
-            return <Dropdown overlay={
-              <Menu items={[{
-                label:'编辑',
-                key : 'edit',
-                onClick: editProject(project.id)
-              },{
-                label:'删除',
-                key: 'delete'
-              }]}/>
-            // <Menu>
-            //   <Menu.Item key='edit' onClick={editProject(project.id)}>编辑</Menu.Item>
-            //   <Menu.Item key='delete'>删除</Menu.Item>
-            // </Menu>
-          }>
-              <Button type='link'>...</Button>
-            </Dropdown>
+            return <More project={project}/>
           }
         }
       ]}
@@ -105,4 +81,33 @@ export const List = ( { users,...props }: ListProps) => {
 //跟踪无限循环的组件
 // List.whyDidYouRender = true
 
+const More = ({project}:{project: Project}) => {
+  const {startEdit} = useProjectModal()
+  const editProject = (id: number) => () => startEdit(id)
+  const { mutate: deleteProject} = useDeleteProject (useProjectsQueryKey())
+  const confirmDeleteProject = (id: number) => {
+    return Modal.confirm({
+      title: '确认删除这个项目吗',
+      content: '点击确认删除',
+      okText: '确定',
+      onOk(){
+        // console.log('id',{id})
+        deleteProject({id})
+      }
+    })
+  }
 
+  return <Dropdown overlay={
+    <Menu items={[{
+      label:'编辑',
+      key : 'edit',
+      onClick: editProject(project.id)
+    },{
+      label:'删除',
+      key: 'delete',
+      onClick: () => confirmDeleteProject(project.id)
+    }]}/>
+}>
+    <Button type='link'>...</Button>
+  </Dropdown>
+}

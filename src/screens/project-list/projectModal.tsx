@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Drawer, Button, Spin, Form, Input} from 'antd'
-import { useProjectModal } from './util'
+import { useProjectModal, useProjectsQueryKey } from './util'
 import { UserSelect } from 'components/useSelect'
 import { useAddProject, useEditProject } from 'utils/project'
 
@@ -11,9 +11,10 @@ export const ProjectModal = () => {
   const {projectModalOpen,close, editingProject, isLoading} = useProjectModal()
   const title = editingProject ? '编辑项目' : '创建项目'
   const useMutateProject = editingProject ? useEditProject : useAddProject
+  const {mutateAsync, error ,isLoading:mutateLoading} = useMutateProject(useProjectsQueryKey())
 
-  const {mutateAsync, error ,isLoading:mutateLoading} = useMutateProject()
   const [form] = Form.useForm()
+
   const onFinish = (values:any) => {
     mutateAsync({...editingProject, ...values}).then(()=>{
       form.resetFields()
@@ -21,11 +22,16 @@ export const ProjectModal = () => {
     })
   }
   
+  const closeModal = () => {
+    form.resetFields()
+    close()
+  }
+
   useEffect(()=>{
     form.setFieldsValue(editingProject)
   },[editingProject,form])
   //或者用getContainer={false} 
-  return <Drawer forceRender={true} onClose={close} visible = {projectModalOpen} width='100%'>
+  return <Drawer forceRender={true} onClose={closeModal} visible = {projectModalOpen} width='100%'>
     <Container>
       {
         isLoading ? <Spin size='large'></Spin> : <>
